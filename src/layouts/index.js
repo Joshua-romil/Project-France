@@ -3,19 +3,32 @@ import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 
 import Header from '../components/header'
+import Footer from '../components/footer'
 import './index.css'
+import Wave from '../components/wave';
+import styled from 'styled-components'
+
+const WaveBottom = styled.div`
+    position: absolute;
+    width: 100%;
+    margin-top: -171px;
+`
 
 const Layout = ({ children, data }) => (
   <div>
     <Helmet
       title={data.site.siteMetadata.title}
       meta={[
-        { name: 'description', content: 'Sample' },
-        { name: 'keywords', content: 'sample, something' },
+        { name: 'description', content: data.site.siteMetadata.description},
+        { name: 'keywords', content: data.site.siteMetadata.keywords},
       ]}
     />
     <Header/>
     {children()}
+    {/* <WaveBottom><Wave/></WaveBottom> */}
+    <Footer data={data}>
+      For any questions regarding marketing opportunities please <a href="mailto:veloarmedia@gmail.com">Email</a> us.
+    </Footer>
   </div>
 )
 
@@ -30,7 +43,18 @@ export const query = graphql`
     site {
       siteMetadata {
         title
+        description
+        keywords
       }
     }
+    allContentfulLink(sort: {fields: [createdAt], order: ASC}){
+      edges{
+        node{
+          title
+          url
+          createdAt
+        }
+      }
   }
+}
 `
